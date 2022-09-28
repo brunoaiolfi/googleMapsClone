@@ -1,15 +1,18 @@
 import React, { useEffect, useState, } from 'react';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
+import { GooglePlaceDetail, GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import MapView, { MapEvent, Region, Marker, MarkerProps, PROVIDER_GOOGLE } from 'react-native-maps';
-import { StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import * as Location from 'expo-location';
 import MapViewDirections from 'react-native-maps-directions';
 
-const GOOGLE_MAPS_APIKEY = 'AIzaSyCa4FRubTVmVAytSg4DHZS6GjhcVKnoJKY';
+import { Dimensions } from 'react-native';
 
 interface IPointers extends MarkerProps {
   key: string
 }
+const windowWidth = Dimensions.get('window').width;
+const GOOGLE_MAPS_APIKEY = sua api key;
+
 export default function App() {
 
   const [location, setLocation] = useState<Region>({
@@ -60,15 +63,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <GooglePlacesAutocomplete
-        styles={styles.input}
-        placeholder="search"
-        onPress={() => { }}
-        query={{
-          key: { GOOGLE_MAPS_APIKEY },
-          language: "pt-BR"
-        }}
-      />
+
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
@@ -85,7 +80,13 @@ export default function App() {
             <Marker
               key={point.key}
               coordinate={point.coordinate}
-            />
+            >
+              <Image
+                style={styles.marker}
+                source={require('./assets/images/marker.png')}
+              />
+            </Marker>
+
             <MapViewDirections
               origin={{
                 latitude: location?.latitude ?? 0,
@@ -98,13 +99,10 @@ export default function App() {
               apikey={GOOGLE_MAPS_APIKEY}
               strokeWidth={3}
               strokeColor="hotpink"
+
             />
           </>
         }
-
-
-
-
       </MapView>
     </View>
   );
@@ -122,13 +120,27 @@ const styles = StyleSheet.create({
     height: "100%"
   },
   input: {
+    height: 48,
+    width: "100%",
+    backgroundColor: "#ffff",
+    borderColor: "#000",
+    borderWidth: 1,
+    borderRadius: 4,
+  },
+  inputContainer: {
     position: "absolute",
     top: 0,
     right: 0,
-    zIndex: 1000,
-    height: 48,
-    width: 2400,
+    left: 0,
+    zIndex: 100,
+    width: windowWidth,
+    padding: 32,
+    paddingTop: 48,
     backgroundColor: "#ffff",
-
+  },
+  marker: {
+    width: 48,
+    height: 48,
+    resizeMode: 'contain'
   }
 });
